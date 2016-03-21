@@ -8,7 +8,7 @@ A javascript library to help building a video player.
  
 
 
-![http://s19.postimg.org/vy3rzimw3/jvideoplayer.png](jvideoplayer playing kung fu panda 2)
+![jvideoplayer playing kung fu panda 2](http://s19.postimg.org/vy3rzimw3/jvideoplayer.png)
  
  
 Demo video of jvideo player playing Dreamworks' kung fu panda 2: https://www.youtube.com/watch?v=GkYCZXgQLkY
@@ -433,7 +433,7 @@ If you want to develop your own plugins for the **default videoplayer**, it's es
 
 Here is an abstract representation of the **default videoplayer**:
 
-![http://s19.postimg.org/f96xhcfoj/default_videoplayer_architecture.jpg](default videoplayer, abstract)
+![default videoplayer, abstract](http://s19.postimg.org/f96xhcfoj/default_videoplayer_architecture.jpg)
 
 
 There is a wavy ellipsis representing the public api of the video player.
@@ -512,7 +512,7 @@ Those are included in the repository and are called built-in plugins.
 The image below shows an abstract view of the built-in plugins.
 
 
-![http://s19.postimg.org/pgpgtr1wj/default_videoplayer_built_in_plugins.jpg]( default videoplayer built-in plugins )
+![default videoplayer built-in plugins]( http://s19.postimg.org/pgpgtr1wj/default_videoplayer_built_in_plugins.jpg )
 
 
 Those built-in plugins, in a nutshell, are:
