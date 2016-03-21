@@ -368,7 +368,7 @@ This is the core structure of the jvideoplayer library.
     
     
     
-Learn how to use it 
+Learn how to use it
 ---------------
 
 To use it correctly, you need to have the global picture: what elements are used, and how they interact together.
@@ -1644,7 +1644,7 @@ on how to tackle specific problems.
 The eventsqueue
 --------------------
 
-The eventsqueue is an isolated object.
+The [eventsqueue](https://github.com/lingtalfi/jVideoPlayer/blob/master/www/libs/jvideoplayer/js/eventsqueue/eventsqueue.js) is an isolated object.
 It is used by the plugin.ad and plugin.cue built-in plugins of the **default videoplayer**, but you can use it for your own
 plugins if you need to.
 

@@ -10,10 +10,10 @@
 
 
     <!-- MANTIS AND DEPENDENCIES-->
-    <script src="/libs/jdragslider/js/jdragslider.js"></script>
-    <script src="/libs/vswitch/js/vswitch.js"></script>
-    <link rel="stylesheet" href="/libs/jvideoplayer/widget/remote/mantis/style.css">
-    <script src="/libs/jvideoplayer/widget/remote/mantis/mantis.js"></script>
+    <script src="https://raw.githubusercontent.com/lingtalfi/jDragSlider/master/www/libs/jdragslider/js/jdragslider.js"></script>
+    <script src="https://raw.githubusercontent.com/lingtalfi/VSwitch/master/www/libs/vswitch/js/vswitch.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/lingtalfi/jVideoPlayer/master/www/libs/jvideoplayer/widget/remote/mantis/style.css">
+    <script src="https://cdn.rawgit.com/lingtalfi/jVideoPlayer/master/www/libs/jvideoplayer/widget/remote/mantis/mantis.js"></script>
 
     <style>
         body {
@@ -26,7 +26,67 @@
 <body>
 
 
-<?php echo file_get_contents("templates/jvp.mantis.htpl"); ?>
+
+
+<!-- START https://github.com/lingtalfi/jVideoPlayer/blob/master/www/templates/jvp.mantis.htpl -->
+<div class="mantis_host">
+
+
+    <div class="videoplayer"></div>
+
+    <div class="player_controls">
+        <section class="timeline">
+            <label class="noselect">00:00:00</label>
+            <div class="scrubber">
+                <div class="progress">
+                    <div class="completed"></div>
+                    <div class="buffered"></div>
+
+                    <div class="mark arrow"></div>
+                    <div class="mark guide"></div>
+                </div>
+                <!-- Note: the handle class has been added to the .target button, because firefox otherwise "doesn't detect" the click on the handle -->
+                <button class="target handle">
+                    <div class="handle"></div>
+                </button>
+                <section class="preview noselect">
+                </section>
+            </div>
+        </section>
+        <section class="control_bar">
+            <div class="control control_play_resume jvp-icon-play"></div>
+            <div class="control control_pause jvp-icon-pause"></div>
+            <div class="control control_volume jvp-icon-volume-high">
+                <div class="menu_wrapper">
+                    <div class="padder">
+                        <div class="scrubber">
+                            <div class="progress">
+                                <div class="completed"></div>
+                            </div>
+                            <!-- Note: the handle class has been added to the .target button, because firefox otherwise "doesn't detect" the click on the handle -->
+                            <button class="target handle vertical">
+                                <div class="handle vertical"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="video_title noselect"><span>Crouching Tiger, Hidden Dragon: Sword of Destiny</span></div>
+            <!--            <div class="control control_config jvp-icon-cog"></div>-->
+            <div class="control control_fullscreen jvp-icon-enlarge"></div>
+        </section>
+        <section class="bubble_bar">
+            <div class="bubble">
+                <label><a href="#">Skip ad</a></label>
+            </div>
+        </section>
+
+
+    </div>
+</div>
+<!-- END https://github.com/lingtalfi/jVideoPlayer/blob/master/www/templates/jvp.mantis.htpl -->
+
+
 
 
 <div id="specials">
@@ -52,7 +112,7 @@
 
             // creating a fake thumbnail preview manually
             mantis.jTimeLinePreview.append('<time>00:00:00</time>');
-            mantis.jTimeLinePreview.append('<img src="/img/compute.jpg">');
+            mantis.jTimeLinePreview.append('<img src="http://www.keenthemes.com/preview/metronic/theme/assets/global/plugins/jcrop/demos/demo_files/image1.jpg">');
 
 
             

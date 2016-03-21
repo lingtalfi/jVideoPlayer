@@ -41,8 +41,7 @@ Vswitch is used to ease change of states (for instance the play button becomes t
 
 
 
-
-TODO: put a codepen here...
+Here is a code pen: http://codepen.io/lingtalfi/pen/MypLyN
 
 
 
