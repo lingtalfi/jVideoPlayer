@@ -1736,6 +1736,10 @@ Default videoplayer plugins todolist:
 - create a plugin that summarizes the video info after XX seconds of inactivity
 
 - create a plugin that creates a "back to app link" on the top left corner of the screen
+- create a playlist plugin
+ 
+ 
+Pull requests are welcome... 
     
     
     
