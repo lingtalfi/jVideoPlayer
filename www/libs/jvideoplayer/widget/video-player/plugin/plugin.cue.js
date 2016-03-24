@@ -54,7 +54,7 @@
                 mode: 'relative',
                 events: this.d.events,
                 onEventFired: function (event) {
-                    vp.clearLayer('cue');
+                    vp.lm.clearLayer('cue');
                     var jCue = $('<div class="cue">' + formatText(event.text) + '</div>');
                     vp.lm.getJLayer('cue').append(jCue);
                     setTimeout(function () {

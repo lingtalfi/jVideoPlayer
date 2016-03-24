@@ -17,32 +17,35 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
-.jvp-icon-enlarge:before {
+.jvp-icon-arrow-with-circle-left:before {
   content: "\e900"; }
 
-.jvp-icon-shrink:before {
+.jvp-icon-enlarge:before {
   content: "\e901"; }
 
-.jvp-icon-cog:before {
+.jvp-icon-shrink:before {
   content: "\e902"; }
 
-.jvp-icon-play:before {
+.jvp-icon-cog:before {
   content: "\e903"; }
 
-.jvp-icon-pause:before {
+.jvp-icon-play:before {
   content: "\e904"; }
 
-.jvp-icon-volume-high:before {
+.jvp-icon-pause:before {
   content: "\e905"; }
 
-.jvp-icon-volume-medium:before {
+.jvp-icon-volume-high:before {
   content: "\e906"; }
 
-.jvp-icon-volume-low:before {
+.jvp-icon-volume-medium:before {
   content: "\e907"; }
 
-.jvp-icon-volume-mute:before {
+.jvp-icon-volume-low:before {
   content: "\e908"; }
+
+.jvp-icon-volume-mute:before {
+  content: "\e909"; }
 
 :-webkit-full-screen {
   position: fixed;

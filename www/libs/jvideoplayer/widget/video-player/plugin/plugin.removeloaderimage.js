@@ -66,7 +66,6 @@
         prepare: function (vp) {
             this.vp = vp;
             var zis = this;
-
             /**
              * Todo: make the image stay at least X seconds (fast connections you don't see nothing).
              */
