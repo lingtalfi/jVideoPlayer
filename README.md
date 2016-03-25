@@ -39,9 +39,11 @@ Summary
     - [plugin.mantis.clonethumbnailpreview](#pluginmantisclonethumbnailpreview)
     - [plugin.mantis.timelinemark](#pluginmantistimelinemark)
     - [plugin.mantis.timeelapsed](#pluginmantistimeelapsed)
+    - [plugin.mantis.backtoapp](#pluginmantisbacktoapp)
     - [plugin.ad](#pluginad)
     - [plugin.ad.skipadbutton](#pluginadskipadbutton)
     - [plugin.cue](#plugincue)
+    - [plugin.inactivity](#plugininactivity)
     
     
 - [Tutorial: Create a hello world plugin](#tutorial-create-a-hello-world-plugin) 
@@ -321,47 +323,49 @@ This is the core structure of the jvideoplayer library.
 ```
 .
 ├── libs
-│   └── jvideoplayer
-│       ├── js
-│       │   ├── eventsqueue
-│       │   │   └── eventsqueue.js
-│       │   ├── util
-│       │   │   └── video-events-watcher.js
-│       │   └── video-element
-│       │       ├── html5-video-element.js
-│       │       └── video-element.js
-│       ├── prototype
-│       │       ├── ... contains some demo/prototypes files
-│       └── widget
-│           ├── layered-manager
-│           │   ├── layered-manager.css
-│           │   ├── layered-manager.js
-│           │   └── layered-manager.scss
-│           ├── remote
-│           │   └── mantis
-│           │       ├── fonts
-│           │       │   ├── icomoon.eot
-│           │       │   ├── icomoon.svg
-│           │       │   ├── icomoon.ttf
-│           │       │   └── icomoon.woff
-│           │       ├── mantis.js
-│           │       ├── style.css
-│           │       └── style.scss
-│           └── video-player
-│               ├── plugin
-│               │   ├── ad
-│               │   │   ├── plugin.ad.js
-│               │   │   └── plugin.ad.skipadbutton.js
-│               │   ├── mantis
-│               │   │   ├── plugin.mantis.clonethumbnailpreview.js
-│               │   │   ├── plugin.mantis.js
-│               │   │   ├── plugin.mantis.thumbnailpreview.js
-│               │   │   ├── plugin.mantis.timeelapsed.js
-│               │   │   └── plugin.mantis.timelinemark.js
-│               │   ├── plugin.cue.js
-│               │   ├── plugin.debughelper.js
-│               │   └── plugin.removeloaderimage.js
-│               └── video-player.js
+│   └── jvideoplayer
+│       ├── js
+│       │   ├── eventsqueue
+│       │   │   └── eventsqueue.js
+│       │   ├── util
+│       │   │   └── video-events-watcher.js
+│       │   └── video-element
+│       │       ├── html5-video-element.js
+│       │       └── video-element.js
+│       ├── prototype
+│       │       ├── ... contains some demo/prototypes files
+│       └── widget
+│           ├── layered-manager
+│           │   ├── layered-manager.css
+│           │   ├── layered-manager.js
+│           │   └── layered-manager.scss
+│           ├── remote
+│           │   └── mantis
+│           │       ├── fonts
+│           │       │   ├── icomoon.eot
+│           │       │   ├── icomoon.svg
+│           │       │   ├── icomoon.ttf
+│           │       │   └── icomoon.woff
+│           │       ├── mantis.js
+│           │       ├── style.css
+│           │       └── style.scss
+│           └── video-player
+│               ├── plugin
+│               │   ├── ad
+│               │   │   ├── plugin.ad.js
+│               │   │   └── plugin.ad.skipadbutton.js
+│               │   ├── mantis
+│               │   │   ├── plugin.mantis.backtoapp.js
+│               │   │   ├── plugin.mantis.clonethumbnailpreview.js
+│               │   │   ├── plugin.mantis.js
+│               │   │   ├── plugin.mantis.thumbnailpreview.js
+│               │   │   ├── plugin.mantis.timeelapsed.js
+│               │   │   └── plugin.mantis.timelinemark.js
+│               │   ├── plugin.cue.js
+│               │   ├── plugin.debughelper.js
+│               │   ├── plugin.inactivity.js
+│               │   └── plugin.removeloaderimage.js
+│               └── video-player.js
 └── templates
     └── jvp.mantis.htpl
 ```    
@@ -512,7 +516,7 @@ Those are included in the repository and are called built-in plugins.
 The image below shows an abstract view of the built-in plugins.
 
 
-![default videoplayer built-in plugins]( http://s19.postimg.org/pgpgtr1wj/default_videoplayer_built_in_plugins.jpg )
+![default videoplayer built-in plugins]( http://s19.postimg.org/th3ljojfn/default_videoplayer_built_in_plugins_2.jpg )
 
 
 Those built-in plugins, in a nutshell, are:
@@ -524,6 +528,7 @@ Those built-in plugins, in a nutshell, are:
 - plugin.ad.skipadbutton: "dependency" of the ad plugin. Display a "skip ad button" after x seconds of played advertising.
 - plugin.debughelper: tells you what events are fired, and what events are listened to (more on events later)
 - plugin.cue: add subtitles to your video
+- plugin.inactivity: put the gui in/out sleep mode
 
 
 Also, the mantis plugin has its own plugins:
@@ -532,6 +537,7 @@ Also, the mantis plugin has its own plugins:
 - plugin.mantis.clonethumbnailpreview: display a thumbnail preview, when the user hovers the timeline, using a cloned video tag trick
 - plugin.mantis.timelinemark: allow the developer to write marks on the timeline, useful for representing the ads position for instance
 - plugin.mantis.timeelapsed: display the elapsed time at any moment
+- plugin.mantis.backtoapp: display an arrow that links back to the previous page
 
 
 
@@ -567,7 +573,7 @@ Using red for fired events, and green for listened to events.
 Then listing all events of the objects, and we get the following result:
 
 
-![Default videoplayer built-in plugins events interaction map](http://s19.postimg.org/mo0ungqxv/default_videoplayer_builtin_plugins_events_inter.jpg)
+![Default videoplayer built-in plugins events interaction map](http://s19.postimg.org/b2t2fp74z/default_videoplayer_builtin_plugins_events_inter.jpg)
 
 
 Of course, this map is just a visual cheatsheet, and it is useful only if you know WHY every 
@@ -807,6 +813,22 @@ If you are interested in mantis events, have a look at the end of the [mantis pa
                               it's going to be wrong (by conception) at some point in the future:
                               todo: change that conception so that subtitles could be attached on a per video basis, rather than just on the main video    
     
+
+### plugin.inactivity
+
+
+- triggered:
+ 
+     - inactivityOn: indicate that the gui is inactive
+     - inactivityOff: indicate that the gui is active 
+
+- listened to:
+ 
+     - inactivityOn: by default, add the inactivity css class to the host
+     - inactivityOff: by default, remove the inactivity css class from the host
+
+
+
 
 
 Knowing the why is important, especially if you build your own plugins, because then you know
@@ -1759,6 +1781,10 @@ Related dependencies
     
 History Log
 ------------------
+    
+- 1.1.0 -- 2016-03-25
+
+    - add "back to app" and "inactivity" plugins
     
 - 1.0.0 -- 2016-03-19
 

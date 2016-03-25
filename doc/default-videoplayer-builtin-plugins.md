@@ -145,6 +145,31 @@ A subtitle event has the following properties:
 
 
 
+plugin.inactivity
+----------------
+
+
+The goal of this plugin is to put the gui to sleep after x seconds of user's inactivity.
+
+Visually, the gui going to sleep means that the remote (mantis remote) and other controls (if any) disappear.
+
+
+In order to fulfill its goal, the inactivity plugin sends inactivityOff and inactivityOn events,
+so that elements can respond to them.
+
+
+Also, by default it toggles the inactivity css class on and off the gui's container element (also called host or surface).
+ 
+Therefore, as a plugin developer, if you want to react to the gui's inactivity plugin events, you can do it via css, 
+or programmatically.
+
+
+Built-in plugins are aware of the inactivity plugin already, so if you plug in the inactivity plugin,
+the controls (mantis remote) and the backToApp button (if you use plugin.mantis.backtoapp plugin) will react 
+to the gui's inactivity.
+
+
+
 
 Mantis plugins
 ===================
@@ -223,6 +248,14 @@ plugin.mantis.timeelapsed
 -------------------------------
 
 This plugin shows the elapsed time on the right of the timeline.
+
+
+
+plugin.mantis.backtoapp
+-------------------------------
+
+This plugin displays a back to application button.
+Actually, you can set the link to whatever you wish.
 
 
 

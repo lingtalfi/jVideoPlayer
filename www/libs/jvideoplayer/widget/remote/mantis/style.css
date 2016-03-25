@@ -59,6 +59,12 @@
   height: 100%;
   background: black;
   /*--------------------------------------------------------------------------*
+  // VIDEO PLAYER
+  /*--------------------------------------------------------------------------*/
+  /*--------------------------------------------------------------------------*
+  // INACTIVITY PLUGIN
+  /*--------------------------------------------------------------------------*/
+  /*--------------------------------------------------------------------------*
   // VSWITCHES
   /*--------------------------------------------------------------------------*/ }
   .mantis_host > .videoplayer {
@@ -444,6 +450,12 @@
             text-decoration: none; }
             .mantis_host .player_controls .bubble_bar .bubble label a:hover {
               text-decoration: underline; }
+  .mantis_host.inactivity .player_controls {
+    opacity: 0; }
+  .mantis_host.inactivity .backtoapp {
+    opacity: 0; }
+  .mantis_host.inactivity .cue {
+    bottom: 10%; }
   .mantis_host.control_pause .player_controls .control_bar .control_play_resume {
     display: none; }
   .mantis_host.control_pause .player_controls .control_bar .control_pause {
