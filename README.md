@@ -13,6 +13,9 @@ A javascript library to help building a video player.
  
 Demo video of jvideo player playing Dreamworks' kung fu panda 2: https://www.youtube.com/watch?v=GkYCZXgQLkY
 
+
+Codepen of the latest version: http://codepen.io/lingtalfi/pen/aNwbJy
+
  
  
 Summary
@@ -1750,14 +1753,10 @@ Default videoplayer plugins todolist:
         - left/right arrows to move the current time backward/forward, 1s per stroke, or 10s with shift on
         - f: toggle enter/exit fullscreen
         
-- create a plugin that make the mantis control disappear if the user leaves the mouse inactive outside of the remote widget
-         for x seconds.
-         The mantis remote reappears as soon as the user moves the mouse again
-         
- 
+
 - create a plugin that summarizes the video info after XX seconds of inactivity
 
-- create a plugin that creates a "back to app link" on the top left corner of the screen
+
 - create a playlist plugin
  
  
