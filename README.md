@@ -41,6 +41,7 @@ Summary
   - [Plugins](#plugins)
   - [The remote](#the-remote)
   - [Plugin todolist](#plugin-todolist)
+  - [Tutorials](#tutorials)
 
  
  
@@ -695,6 +696,27 @@ The source files for the mantis remote are located here:
 
 
 - [www/libs/jvideoplayer/widget/remote/mantis](https://github.com/lingtalfi/jVideoPlayer/tree/master/www/libs/jvideoplayer/widget/remote/mantis)
+
+
+
+
+
+Tutorials
+-------------
+
+
+There is the tutorial section.
+Feel free to ask for tutorials, I'm aware that it might be hard to get started right now.
+
+There is no tutorial for now, but instead I will point you to files that you can use as starting points:
+ 
+ 
+
+- [all files are located here](https://github.com/lingtalfi/jVideoPlayer/tree/master/www/libs/jvideoplayer/prototype/)
+- [mantis remote only](https://github.com/lingtalfi/jVideoPlayer/tree/master/www/libs/jvideoplayer/prototype/widget/remote/mantis/mantis-skin-only.php)
+- [replay mode bunny local: basic](https://github.com/lingtalfi/jVideoPlayer/tree/master/www/libs/jvideoplayer/prototype/widget/videoplayer/replay-mode-bunny-local.html)
+- [replay mode bunny public: basic](https://github.com/lingtalfi/jVideoPlayer/tree/master/www/libs/jvideoplayer/prototype/widget/videoplayer/replay-mode-bunny-public.html)
+- [replay mode panda: more advanced](https://github.com/lingtalfi/jVideoPlayer/tree/master/www/libs/jvideoplayer/prototype/widget/videoplayer/replay-mode-panda.php)
 
 
 

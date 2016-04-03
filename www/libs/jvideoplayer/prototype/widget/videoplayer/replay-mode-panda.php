@@ -33,12 +33,9 @@ $subtitles = SrtToArrayTool::getArrayByFile($f, [
     <script src="/libs/jvideoplayer/widget/video-player/video-player.js"></script>
 
 
-    <script src="/libs/jvideoplayer/widget/video-player/plugin/plugin.removeloaderimage.js"></script>
     <script src="/libs/jvideoplayer/widget/video-player/plugin/plugin.debughelper.js"></script>
-    <script src="/libs/jvideoplayer/widget/video-player/plugin/ad/plugin.ad.js"></script>
     <script src="/libs/jvideoplayer/widget/video-player/plugin/ad/plugin.ad.minplay.js"></script>
     <script src="/libs/jvideoplayer/widget/video-player/plugin/ad/plugin.ad.skipadbutton.js"></script>
-    <script src="/libs/jvideoplayer/widget/video-player/plugin/plugin.cue.js"></script>
     <script src="/libs/jvideoplayer/widget/video-player/plugin/innerqueue/plugin.innerqueue.js"></script>
     <script src="/libs/jvideoplayer/widget/video-player/plugin/innerqueue/innerqueue.handler.cue.js"></script>
     <script src="/libs/jvideoplayer/widget/video-player/plugin/innerqueue/innerqueue.handler.ad.js"></script>
