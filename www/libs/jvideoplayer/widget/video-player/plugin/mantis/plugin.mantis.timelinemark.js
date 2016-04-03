@@ -52,6 +52,9 @@
              */
             marks: [],
             cssClassMark: 'timeline_mark',
+            matchVideo: function(videoInfo){
+                return (videoInfo.type && 'main' === videoInfo.type);
+            },
         }, options);
     };
 
@@ -65,7 +68,7 @@
 
                 zis.removeVisualMarks();
 
-                if (true === vp.mainVideoHasFocus()) {
+                if (true === zis.d.matchVideo(info)) {
                     zis.duration = info.duration;
                     for (var i in zis.d.marks) {
                         zis.drawMark(zis.d.marks[i], zis.tl);

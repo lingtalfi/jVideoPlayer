@@ -1,6 +1,64 @@
 (function () {
 
-
+    /**
+     * 
+     * Definition
+     * -------------
+     * 
+     * The eventsQueue object allows us to attach events on a timeline in a consistent manner.
+     * 
+     * 
+     * 
+     * What's the problem?
+     * ----------------------
+     * 
+     * Imagine that you want to play a subtitle 3 seconds after a video starts, and another one at 5 seconds.
+     * So you prepare some kind of timeouts that fire at 3 and 5 seconds after the video starts.
+     *
+     * But now imagine that the user watch the video, but pauses the video after 2 seconds!
+     * Then, you have to cancel your timeouts right? (otherwise the subtitles would display in the middle of the pause: nonsense)
+     *
+     * Now imagine that the user scrubs the timeline and move forward, and then back again to 1 second!
+     * Then, you have to re-adjust your timeouts timing, right?
+     *
+     * The eventsQueue let you declare what events you want, and at what time they start, 
+     * and handles the dirty timeout management for you.
+     * 
+     * 
+     * The eventsQueue modes
+     * ------------------------
+     * 
+     * The eventsQueue object was created with two modes:
+     * 
+     * - absolute: for absolute timing
+     * - relative: for relative timing
+     * 
+     * Absolute mode is actually never used, so let's forget about it.
+     * We are left with the relative mode, which is the mode I just explained above.
+     * 
+     * 
+     * 
+     * The onEventPrepared and onEventFired callbacks
+     * --------------------------------------------------
+     * 
+     * Re-using the subtitles example from above, at 3s and 5s,
+     * you might think that only one timeout is fired per event.
+     * 
+     * But there are actually two callbacks fired per event (a total of four callbacks in our example).
+     * Each event is handled by the following callbacks:
+     * 
+     * - prepare: allow us to prepare the event.
+     *                  Handling subtitles is simple enough that we don't use the prepare callback.
+     *                  However, playing an advertising at given point in times is different, because
+     *                  advertising is a video, and video needs to be preloaded: you can not just say fire the video
+     *                  and expects it to fire instantly.
+     *                  The prepare callback allows us to preload the video, so that when the fire event is fired,
+     *                  we can have the ad video playing with no latency.
+     *                  
+     *                  
+     * - fire: fire the event
+     *
+     */
     window.eventsQueue = function (options) {
 
         this.d = extend({
@@ -173,10 +231,5 @@
     function getCurrentTimestamp() {
         return Date.now();
     }
-
-    function devError(msg) {
-        throw new Error("streamBox: " + msg);
-    }
-
 
 })();

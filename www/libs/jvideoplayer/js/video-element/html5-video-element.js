@@ -102,14 +102,12 @@
          * Possible events are:
          *
          * - timeupdate
-         *          fired as the time flows.
-         *          The time should be updated in interval smaller than a second.
-         *          Intervals don't have to be constant.
+         *          fired whenever the time is updated, either because of the natural flow,
+         *          or by user seeking.
          *
          * - progress
          *          fired when chunks of video are downloaded.
          *          This helps creating a visual representation of the buffered ranges.
-         *
          * - ended
          *          fired when the video naturally ends,
          *          or if the time is set to a value more than or equal to the duration.

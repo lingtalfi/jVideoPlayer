@@ -2,7 +2,7 @@
 
 
     /**
-     * This plugin will subscribe to some events,
+     * This plugin will subscribe to some (default video player) events,
      * and just notify you when those events are played.
      */
 

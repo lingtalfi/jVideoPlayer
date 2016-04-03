@@ -6,26 +6,36 @@
     <title>Html page</title>
 
 
-
-
-
     <!-- MANTIS AND DEPENDENCIES-->
-    <script src="https://raw.githubusercontent.com/lingtalfi/jDragSlider/master/www/libs/jdragslider/js/jdragslider.js"></script>
-    <script src="https://raw.githubusercontent.com/lingtalfi/VSwitch/master/www/libs/vswitch/js/vswitch.js"></script>
-    <link rel="stylesheet" href="https://cdn.rawgit.com/lingtalfi/jVideoPlayer/master/www/libs/jvideoplayer/widget/remote/mantis/style.css">
-    <script src="https://cdn.rawgit.com/lingtalfi/jVideoPlayer/master/www/libs/jvideoplayer/widget/remote/mantis/mantis.js"></script>
+    <script
+        src="https://cdn.rawgit.com/lingtalfi/jDragSlider/master/www/libs/jdragslider/js/jdragslider.js"></script>
+    <script src="https://cdn.rawgit.com/lingtalfi/VSwitch/master/www/libs/vswitch/js/vswitch.js"></script>
+    <script src="/libs/jvideoplayer/widget/remote/mantis/mantis.js"></script>
+    <link rel="stylesheet" href="/libs/jvideoplayer/widget/remote/mantis/style.css">
 
     <style>
         body {
             background: black;
         }
+
+        #specials {
+            background: white;
+            width: 500px;
+            height: 100px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
     </style>
 </head>
 
 
 <body>
-
-
 
 
 <!-- START https://github.com/lingtalfi/jVideoPlayer/blob/master/www/templates/jvp.mantis.htpl -->
@@ -87,13 +97,12 @@
 <!-- END https://github.com/lingtalfi/jVideoPlayer/blob/master/www/templates/jvp.mantis.htpl -->
 
 
-
-
 <div id="specials">
     <button class="special toggle_timeline">toggle timeline</button>
     <button class="special toggle_volume">toggle_volume</button>
     <button class="special toggle_mute">toggle_mute</button>
     <button class="special toggle_bubble">toggle_bubble</button>
+    <button class="special toggle_preview">toggle_preview</button>
 </div>
 
 <script>
@@ -103,11 +112,9 @@
 
             var jSurface = $('.mantis_host');
 
-            
-
 
             var duration = 1000; // 1000 seconds
-            
+
             var mantis = new Mantis(jSurface);
 
             // creating a fake thumbnail preview manually
@@ -115,8 +122,6 @@
             mantis.jTimeLinePreview.append('<img src="http://www.keenthemes.com/preview/metronic/theme/assets/global/plugins/jcrop/demos/demo_files/image1.jpg">');
 
 
-            
-            
             //------------------------------------------------------------------------------/
             // SPECIAL
             //------------------------------------------------------------------------------/
@@ -126,6 +131,9 @@
                 }
                 else if ($(this).hasClass('toggle_volume')) {
                     jSurface.toggleClass("volume_panel");
+                }
+                else if ($(this).hasClass('toggle_preview')) {
+                    jSurface.toggleClass("preview_mode");
                 }
                 else if ($(this).hasClass('toggle_mute')) {
                     var jControl = $('.control_volume');

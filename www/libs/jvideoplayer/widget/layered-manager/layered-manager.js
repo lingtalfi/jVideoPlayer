@@ -40,6 +40,12 @@ layeredManager.prototype = {
         this.layers[name] = jLayer;
         return this;
     },
+    hasLayer: function (name) {
+        return (name in this.layers);
+    },
+    getJLayer: function (name) {
+        return this._getLayer(name);
+    },
     showLayer: function (name) {
         this._getLayer(name).show();
         return this;
@@ -51,9 +57,6 @@ layeredManager.prototype = {
     clearLayer: function (name) {
         this._getLayer(name).empty();
         return this;
-    },
-    hasLayer: function (name) {
-        return (name in this.layers);
     },
     destroyLayer: function (name) {
         if (this._hasLayer(name)) {
@@ -68,9 +71,6 @@ layeredManager.prototype = {
             this.destroyLayer(sourceLayer);
         }
         return this;
-    },
-    getJLayer: function (name) {
-        return this._getLayer(name);
     },
     //------------------------------------------------------------------------------/
     // PRIVATE

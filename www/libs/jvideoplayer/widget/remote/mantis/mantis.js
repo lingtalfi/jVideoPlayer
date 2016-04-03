@@ -31,6 +31,7 @@
         this.sliderWidth = 0;
         this.halfPreviewWidth = 0;
         this.isFullScreen = false;
+        this.scrubLimit = null;
 
         this.jSurface = jSurface;
         this.jPlayer = $('.player_controls', this.jSurface); // contains all css actions/transitions/states classes 
@@ -41,7 +42,7 @@
         this.jTimeLineScrubber = $('.scrubber', this.jTimeLine);
         this.jTimeLineProgress = $('.progress', this.jTimeLineScrubber);
 
-        
+
         this.jTimeLineHandle = $('.target .handle', this.jTimeLineScrubber);
         this.jSliderCompleted = $('.completed', this.jTimeLine);
         this.jSliderBuffered = $('.buffered', this.jTimeLine);
@@ -285,10 +286,12 @@
             this.jTimeLineMarkArrow.css('left', val + 'px');
             var zis = this;
             dragSlider(this.jTimeLineHandle, '.scrubber', true, function (v, p) {
+                p = zis._applyScrubLimit(p);
                 zis._setTimeLinePositionByPercent(p);
                 zis._trigger("timelinedrag", p);
 
             }, function (v, p) {
+                p = zis._applyScrubLimit(p);
                 zis._setTimeLinePositionByPercent(p);
                 zis._trigger("timelineupdated", p);
                 zis.vswitch.kickOut('scrub_mode');
@@ -314,9 +317,22 @@
             };
             dragSlider(this.jVolumeHandle, '.scrubber', false, fn, fn);
         },
+        setScrubLimit: function (t) {
+            this.scrubLimit = t;
+        },
         //------------------------------------------------------------------------------/
         // PRIVATE
         //------------------------------------------------------------------------------/
+        _applyScrubLimit: function (p) {
+            if (null === this.scrubLimit) {
+                return p;
+            }
+            var t = p * this.duration / 100;
+            if (t > this.scrubLimit) {
+                return this.scrubLimit / this.duration * 100;
+            }
+            return p;
+        },
         _getTimeLineMousePosition: function (e) {
             var val = e.pageX - this.sliderOffset;
             if (val < 0) {

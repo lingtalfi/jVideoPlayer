@@ -2,47 +2,100 @@
 
 
     /**
-     * About events of THIS implementation:
-     *
-     * The intents are the following.
-     *
-     * triggered events:
-     *
-     * - createlayer: to use for debug purposes
-     * - setcurrentvideo ( videoInfo ): to refresh the remote text and duration (mantis remote needs duration to start with)
-     *                  Plugins should not fire this event directly, but rather use the 
-     *                  setCurrentVideo method, or the setMainVideoAsCurrent method.
-     *                  Those methods help with the consistency of interactions between events:
-     *                  in particular to track whether or not the main video has the focus,
-     *                  but maybe other things in the future...
-     *                      
-     *                      
-     * - mainvideoready: to remove the image of the removeLoaderImage plugin
-     * - resume: signal that the current video resumes
-     * - pause: signal that the current video pauses
-     * - timeupdate: signal that the current video's time is changing,
-     *                          update the remote timeline
-     * - progress: signal when the browser is downloading video,
-     *                          update the remote's bufferedRanges
-     * - ended: signal that the current video has ended
-     *                  when ad video ends, play back the main video
+     * This implementation uses different concepts.
      *
      *
-     * listened to events:
+     * The current video
+     * --------------------
      *
+     * This is the current video being played.
+     * Be aware that we can have an (video) ad interrupting the video being played.
+     * While the ad is playing, the ad is the current video.
+     *
+     * Whenever the current video is set, the setcurrentvideo event is triggered.
+     * That is, the current video is first updated, and THEN the setcurrentvideo event is triggered.
+     *
+     *
+     *
+     * The videoInfo
+     * ------------------
+     *
+     * This is a js map that carries information about a video.
+     * It is generally used to know which video is currently playing.
+     *
+     *
+     * At the very least, the videoInfo map contains the information necessary to play the video (url, title).
+     * The user can add any number of properties to it.
+     *
+     * Internally, the videoInfo map is decorated by some methods.
+     *
+     * The loadVideo method will add the following properties to the videoInfo map:
+     *
+     * - title, if not already set
+     * - _videoElement: the video element instance (available when the video loaded)
+     * - duration: in seconds (available when the video loaded)
+     *
+     *
+     * The playLoadedVideo will add the following properties to the videoInfo map:
+     *
+     * - _layer: the name of the layer inside which the video is played
+     *
+     *
+     * Examples of use:
+     * When the cue plugin displays subtitles, it needs to know which video is currently playing.
+     * Typically, if there is an ad interrupting the video, the subtitles must pause until the video resumes.
+     * In order to know if the current video is an ad or the main video, the cue plugin tests some
+     * properties of the videoInfo map.
+     *
+     * The ad plugin also use the videoInfo map to know which video is playing.
+     *
+     *
+     *
+     * Public properties
+     * ---------------------
+     *
+     * - lm: the layer manager
+     *
+     *
+     *
+     * Events
+     * ------------
+     *
+     * ### triggered events
+     *
+     *
+     *
+     * - resume ( videoInfo ): signal that the current video resumes
+     * - pause ( videoInfo ): signal that the current video pauses
+     * - settime ( t, videoInfo ): signal that the current video's time has been manually set (typically by scrubbing the timeline)
+     * - setvolume ( v, videoInfo ): signal that the volume has been manually set
+     *
+     * - timeupdate: signal that the current video's time has been updated (either by time flowing, or manually)
+     * - progress: signal when the browser is downloading video, used to update the remote's bufferedRanges
+     * - ended (videoInfo): signal that the current video has ended.
+     * - videoloaded: signal that the current video is ready to play. Used for debug purposes.
+     *
+     * - setcurrentvideo ( videoInfo ): signal that the current video has been updated.
+     *                              Used to refresh the remote text and duration (mantis remote needs duration to start with)
+     * - createlayer ( name, zIndex, appearance ): signal that a layer has been created using the createLayer method.
+     *                              Used for debug purposes.
+     *
+     *
+     * ### listened to events:
      *
      * - resume: resume the current video element
      * - pause: pause the current video element
-     * - settime; pos=100: set the time of the current video element
-     *                      position is 100 so that you can use the stop propagation mechanism of the events dispatcher
-     *                      of this video player.
-     *                      This is used by the ad plugin, which prevents you to set the time past the current time
-     *                      (basically meaning: you cannot skip the ad without the ad plugin's permission).
+     * - settime: set the time of the current video element
+     * - setvolume: set the volume of the current video element
+     *
+     *
+     *
+     *
+     *
      *
      *
      *
      */
-
     window.videoPlayer = function (options) {
 
         this.d = $.extend({
@@ -50,177 +103,277 @@
              * The jquery element representing the video player
              */
             element: null,
-            /**
-             *
-             * Default=false.
-             *
-             * ads are preloaded before they are played (to ensure instant transition
-             * between the video and the ad).
-             *
-             * The preloaded ad is in a layer (called buffer, see LayeredManager object).
-             *
-             * If this option is set to true, the buffer layer remains in the dom (like a ghost)
-             * when the ad is "transferred" from the buffer layer to the ad layer.
-             * This might be useful for debugging.
-             *
-             * If this option is false, then the buffer layers holding the ads are removed as soon
-             * as the ad goes live (i.e. is transferred to the ad layer).
-             *
-             */
-            preserveUnusedBuffersAfterTransfer: false,
             plugins: [],
+            isSameVideoInfo: function(vA, vB){
+                return (vA.hasOwnProperty('url') && vB.hasOwnProperty('url') && vA.url === vB.url);
+            },
         }, options);
 
 
         this.lm = null;
-        this.currentVideo = null;
+        this.currentVideoInfo = null;
         this.listeners = {};
         this.listenerIndex = 0;
         this.plugins = this.d.plugins;
-
-
-        /**
-         * Usually, the player only plays one video (called the main video).
-         * However, it is possible to play another video (in case of ad videos for instance).
-         * Although there is one videoElement per video played, you might want to use the same remote for
-         * playing both videos.
-         *
-         * So, the videoInfo is primarily intended to reset the remote's info when you switch from a video to another.
-         * It can also be used by plugins that need to sync with the main video only, and not other video types like ads.
-         *
-         *
-         * It contains:
-         * - duration: in seconds (automatically set)
-         * - title: the title of the video to display in remote with "digital display".
-         *
-         *
-         * The mainVideoInfo property keeps track of the main video info.
-         */
-        this.mainVideoInfo = {};
-        this.mainVideoElement = null;
-        /**
-         * Helps third party plugins to know whether or not the main video has currently the focus (playing or pausing).
-         */
-        this._mainVideoHasFocus = false;
 
         this._init();
     };
 
     videoPlayer.prototype = {
+        //------------------------------------------------------------------------------/
+        // BASIC API
+        //------------------------------------------------------------------------------/
         /**
-         * videoInfo: array
-         *      url: string, the url of the video to load
-         *      ?title: the title of the video to display in the remote or wherever it seems adequate
+         * Load a video and play it asap when the given timeout expires.
+         *
+         * Note: THIS particular method uses html5 video element only, for now.
+         *
+         *
+         * videoInfo: map
+         *      - url: string, the url of the video to load
+         *      - ?title: the title of the video to display in the remote or wherever it seems adequate
+         *      - ...
+         *      - _videoElement: will be added automatically when the video is loaded
+         *      - _layer: will be added automatically when the video is played
+         *
+         * timeout: number|array
+         *                          0: preloadTimeout
+         *                          1: playTimeout
+         *
+         *
+         * Callbacks are listeners attached to the video.
+         * They are used by some plugins.
+         * They all receive the video player instance as their sole argument:
+         *
+         *      - playBefore: triggered when and just before the video is played
+         *      - playAfter: triggered when and just after the video is played
+         *
+         *      - timeupdate: triggered every time the video time is updated (naturally as time flow, or manually when the user scrubs the timeline)
+         *      - ended: triggered when the video ends
+         *      - load: triggered when the video is loaded (i.e. ready to play)
+         *
+         * layer: string, the name of the layer where to play the video when the video ready
+         *
          */
-        load: function (videoInfo, onReady) {
+        prepareVideo: function (videoInfo, timeout = 0, callbacks = null, layer = 'video') {
             var zis = this;
-            if (false === ('title' in videoInfo)) {
-                videoInfo.title = "";
+
+            var preloadTimeout = 0;
+            if ('object' == typeof timeout) {
+                preloadTimeout = timeout[0];
+                timeout = timeout[1];
+                if (preloadTimeout >= timeout) {
+                    preloadTimeout = 0;
+                }
             }
-            var title = videoInfo.title;
-            this.loadVideo(videoInfo.url, function (videoElement) {
-                zis.mainVideoElement = videoElement;
-                zis.mainVideoInfo = zis.createVideoInfo(videoElement, title);
-                zis.setCurrentVideo(videoElement, zis.mainVideoInfo);
-                zis._mainVideoHasFocus = true;
-                zis.trigger("mainvideoready");
-                onReady();
-            }, 'video');
+            setTimeout(function () {
+                var promise = zis.loadVideo(videoInfo, callbacks);
+                zis.playLoadedVideo(promise, timeout, layer);
+            }, preloadTimeout);
         },
+        /**
+         * Triggers the resume event if the current video is not playing
+         */
         resume: function () {
             if (false === this.getCurrentVideo().isPlaying()) {
-                this.trigger('resume');
+                this.trigger('resume', this.currentVideoInfo);
             }
         },
+        /**
+         * Triggers the pause event if the current video is playing
+         */
         pause: function () {
             if (true === this.getCurrentVideo().isPlaying()) {
-                this.trigger('pause');
+                this.trigger('pause', this.currentVideoInfo);
             }
         },
         /**
-         * Time in seconds
+         * Triggers the settime event with the time argument is seconds
          */
         setTime: function (t) {
-            this.trigger('settime', t);
+            this.trigger('settime', t, this.currentVideoInfo);
         },
         /**
-         * Volume: a value between 0 and 1 (both included)
+         * Triggers the setvolume event with the volume argument in the range of 0 to 1 (both included)
          */
         setVolume: function (v) {
-            this.trigger('setvolume', v);
+            this.trigger('setvolume', v, this.currentVideoInfo);
         },
         //------------------------------------------------------------------------------/
         // PROTECTED API
         //------------------------------------------------------------------------------/
         /**
-         * Goal of this method is to help ensure consistency of
-         * the videoInfo map structure.
-         */
-        createVideoInfo: function (videoElement, title = "") {
-            return {
-                duration: videoElement.getDuration(),
-                title: title,
-            };
-        },
-        setCurrentVideo: function (videoElement, videoInfo) {
-            if (videoElement === this.mainVideoElement) {
-                this._mainVideoHasFocus = true;
-            }
-            else {
-                this._mainVideoHasFocus = false;
-            }
-            this.currentVideo = videoElement;
-            this.trigger("setcurrentvideo", videoInfo);
-        },
-        mainVideoHasFocus: function(){
-            return this._mainVideoHasFocus;
-        },
-        setMainAsCurrentVideo: function () {
-            this.currentVideo = this.mainVideoElement;
-            this._mainVideoHasFocus = true;
-            this.trigger("setcurrentvideo", this.mainVideoInfo);
-        },
-        getCurrentVideo: function () {
-            return this.currentVideo;
-        },
-        /**
-         * Loads a video in the background,
-         * and if the layer argument is set, transfers it to that layer.
+         * Load a video in the background.
+         * Plugin should use this to load a video.
          *
-         * Then, execute the given function, passing it the new loaded videoElement.
+         * It returns a loadedPromise (the promise that the video is loaded).
+         * The loadedPromise has two special properties used for internal purposes, you shouldn't have to use them often:
+         *
+         * - videoInfo: the videoInfo
+         * - callbacks: the callbacks
+         *
+         *
+         * callbacks: see prepareVideo method
+         *
+         *
+         * Once the method is loaded, the videoloaded event is triggered,
+         * and the following events will be triggered as the video plays and ends:
+         *
+         * - timeupdate
+         * - progress
+         * - ended
+         *
+         *
+         * The loadVideo method decorates the videoInfo map with the following properties:
+         *
+         * - title: if not already set
+         * - _videoElement: the video element instance
+         * - duration: in seconds
+         *
+         *
          *
          */
-        getLayerNameByUrl: function (url) {
-            return url;
-        },
-        transferLayerContent: function (sourceLayer, destLayer) {
-            this.lm.transfer(sourceLayer, destLayer, this.d.preserveUnusedBuffersAfterTransfer);
-        },
-        loadVideo: function (url, fn, layer = '') {
-            /**
-             * Note: THIS particular method uses html5 video element only, for now.
-             */
+        loadVideo: function (videoInfo, callbacks = null) {
             var zis = this;
-            var layerName = this.getLayerNameByUrl(url);
-            this.createLayer(layerName, -1, '<video src="' + url + '"></video>');
+            if (null === callbacks) {
+                callbacks = {};
+            }
+
+            if (false === ('title' in videoInfo)) {
+                videoInfo.title = "";
+            }
+            var title = videoInfo.title;
+
+
+            // pre-load the video
+            var layerName = getLayerNameByVideoInfo(videoInfo);
+            zis.createLayer(layerName, -1, '<video src="' + videoInfo.url + '"></video>');
             var videoTag = zis.lm.getJLayer(layerName).find('video')[0];
             var videoElement = new jvpVideoElement();
-            videoElement.load(videoTag, function () {
-                if ('' !== layer) {
-                    zis.transferLayerContent(layerName, layer);
-                }
-                videoElement.on('timeupdate', function () {
-                    zis.trigger('timeupdate');
+            var loadedPromise = new Promise(function (resolve, reject) {
+                videoElement.load(videoTag, function () {
+                    videoElement.on('timeupdate', function () {
+                        zis.trigger('timeupdate');
+                        if ('timeupdate' in callbacks) {
+                            callbacks.timeupdate(videoInfo);
+                        }
+                    });
+                    videoElement.on('progress', function () {
+                        zis.trigger('progress');
+                    });
+                    videoElement.on('ended', function () {
+                        /**
+                         * To ensure that videoInfo is always passed with the ended event,
+                         * this should be the only place where the ended event is triggered.
+                         */
+                        zis.trigger('ended', videoInfo);
+                        if ('end' in callbacks) {
+                            callbacks.end(videoInfo);
+                        }
+                    });
+                    videoInfo._videoElement = videoElement;
+                    videoInfo.duration = videoElement.getDuration();
+                    zis.trigger('videoloaded', videoInfo);
+                    resolve(videoElement);
+                    if ('load' in callbacks) {
+                        callbacks.load(videoInfo);
+                    }
                 });
-                videoElement.on('progress', function () {
-                    zis.trigger('progress');
-                });
-                videoElement.on('ended', function () {
-                    zis.trigger('ended');
-                });
-                fn(videoElement);
             });
+
+            loadedPromise.videoInfo = videoInfo;
+            loadedPromise.callbacks = callbacks;
+            return loadedPromise;
         },
+        /**
+         * Play a loaded video (video loaded with the loadVideo method) asap after the given timeout expires.
+         *
+         * The video is (transferred and) played to the given layer when the play timeout expires.
+         *
+         * The following events are transferred:
+         *
+         * - setcurrentvideo
+         * - resume
+         *
+         *
+         * The videoInfo map is decorated with the following properties:
+         *
+         * - _layer: the name of the layer to which the video is played
+         *
+         *
+         */
+        playLoadedVideo: function (loadedPromise, timeout = 0, layer = "video") {
+            var zis = this;
+            // play the video in the future
+            setTimeout(function () {
+                loadedPromise.then(function () {
+                    var callbacks = loadedPromise.callbacks;
+                    var videoInfo = loadedPromise.videoInfo;
+                    videoInfo._layer = layer;
+                    var layerName = getLayerNameByVideoInfo(videoInfo);
+
+
+                    if ('playBefore' in callbacks) {
+                        callbacks.playBefore(videoInfo);
+                    }
+
+                    // todo: test with cloning rather than transfering, in order to cache loaded videos (for slow connections)?
+                    zis.lm.transfer(layerName, layer, false);
+                    zis.currentVideoInfo = videoInfo;
+                    zis.trigger("setcurrentvideo", videoInfo);
+                    zis.trigger("resume");
+
+                    if ('playAfter' in callbacks) {
+                        callbacks.playAfter(videoInfo);
+                    }
+                });
+
+            }, timeout);
+        },
+        /**
+         * Set the current videoInfo to the given videoInfo,
+         * then trigger the setcurrentvideo event
+         */
+        setCurrentVideoInfo: function (videoInfo) {
+            this.currentVideoInfo = videoInfo;
+            this.trigger('setcurrentvideo', videoInfo);
+        },
+        /**
+         * Get the current videoInfo
+         */
+        getCurrentVideoInfo: function () {
+            return this.currentVideoInfo;
+        },
+        /**
+         * Sugar method to return the current videoInfo's videoElement instance
+         */
+        getCurrentVideo: function () {
+            return this.currentVideoInfo._videoElement;
+        },
+        /**
+         * Sugar method to return whether or not videoInfoA and videoInfoB are the same
+         */
+        isSameVideoInfo: function (videoInfoA, videoInfoB) {
+            return (true === this.d.isSameVideoInfo(videoInfoA, videoInfoB));
+        },
+        /**
+         * Recommended way to create a layer.
+         * It triggers the createlayer method.
+         */
+        createLayer: function (name, zIndex, appearance = "") {
+            this.trigger('createlayer', name, zIndex, appearance);
+            this.lm.createLayer(name, zIndex, appearance);
+        },
+        /**
+         * This method is meant to be overridden by plugins.
+         * It is used whenever an event is triggered.
+         */
+        watchTriggeredEvent: function (eventName, ...args) {
+
+        },
+        //------------------------------------------------------------------------------/
+        // DISPATCHER
+        //------------------------------------------------------------------------------/
         on: function (eventName, fn, position = 0) {
             if (false === (eventName in this.listeners)) {
                 this.listeners[eventName] = {};
@@ -275,13 +428,6 @@
                 }
             }
         },
-        createLayer: function (name, zIndex, appearance = "") {
-            this.trigger('createlayer', name, zIndex, appearance);
-            this.lm.createLayer(name, zIndex, appearance);
-        },
-        watchTriggeredEvent: function (eventName, ...args) {
-
-        },
         //------------------------------------------------------------------------------/
         // PRIVATE
         //------------------------------------------------------------------------------/
@@ -330,10 +476,10 @@
             });
             this.on('settime', function (t) {
                 zis.getCurrentVideo().setTime(t);
-            }, 100); 
+            }, 100);
             this.on('setvolume', function (v) {
                 zis.getCurrentVideo().setVolume(v);
-            }); 
+            });
 
 
             //------------------------------------------------------------------------------/
@@ -351,6 +497,14 @@
 
 
     };
+
+
+    //------------------------------------------------------------------------------/
+    // TOOLS    
+    //------------------------------------------------------------------------------/
+    function getLayerNameByVideoInfo(vi) {
+        return vi.url;
+    }
 
 
 })();

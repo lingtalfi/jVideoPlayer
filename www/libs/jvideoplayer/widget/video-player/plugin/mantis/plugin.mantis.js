@@ -2,7 +2,7 @@
 
     /**
      *
-     * This plugins connects the remote to the video player,
+     * This plugins connects the remote to a video player,
      * and possibly other video player third party plugins.
      *
      *
@@ -30,6 +30,7 @@
      * - bubblehide: hide the bubble (originally designed to show the "skip ad button")
      * - bubbleshow: show the bubble
      * - bubblesettext: set the text of the bubble
+     * - scrublimit: set the maximum scrubbable value on the timeline (above which the user can't scrub)
      *
      *
      */
@@ -55,7 +56,8 @@
             // TRIGGERED
             //------------------------------------------------------------------------------/
             mantis.on('timelineupdated', function (p) {
-                vp.setTime(Math.ceil(vp.getCurrentVideo().getDuration() * p / 100));
+                vp.setTime(vp.getCurrentVideo().getDuration() * p / 100);
+                //vp.setTime(Math.ceil(vp.getCurrentVideo().getDuration() * p / 100));
             });
             mantis.on('play', function () {
                 vp.resume();
@@ -112,6 +114,10 @@
             });
             vp.on('bubblesettext', function (text) {
                 mantis.setBubbleContent(text);
+            });
+            
+            vp.on('scrublimit', function (t) {
+                mantis.setScrubLimit(t);
             });
 
 

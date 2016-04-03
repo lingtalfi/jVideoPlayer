@@ -8,25 +8,19 @@
      * Triggered
      * ------------
      *
-     * - bubblesettext: set the "skip ad" text inside a remote's bubble (info pane)
+     * - bubblesettext ( text ): set the "skip ad" text inside a remote's bubble (info pane provided by the remote)
      * - bubblehide: hide the bubble
      * - bubbleshow: show the bubble
      * - skipad: to skip the current ad
      *
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * listened to
      * ---------------
      *
      * - canskipad: tells the remote to display a bubble with a clickable "skip ad" button inside.
-     * - resume: if the user didn't skip the ad, we remove the bubble when the main video resumes.
-     *                      Note: we assume that the bubble is used only for the purpose
-     *                      of displaying the "skip ad" button.
-     *
-     *
-     *
-     *
+     * - ended: when the ad ends, we resume the main video.
      *
      *
      */
@@ -35,6 +29,7 @@
             text: "Skip ad",
         }, options);
         this.vp = null;
+        this.adVideoInfo = null;
     };
 
     pluginAdSkipAdButton.prototype = {
@@ -48,20 +43,23 @@
             //------------------------------------------------------------------------------/
             // EVENTS LISTENING
             //------------------------------------------------------------------------------/
-            vp.on('canskipad', function () {
+            vp.on('canskipad', function (videoInfo) {
                 vp.trigger('bubblehide'); // hide any already existing bubble, by precaution
                 vp.trigger('bubblesettext', jLink);
                 vp.trigger('bubbleshow');
                 jLink.on('click', function () {
                     vp.trigger('bubblehide');
-                    vp.trigger('skipad');
+                    var time = vp.getCurrentVideo().getDuration() + 100;
+                    vp.setTime(time);
                     return false;
                 });
             });
 
-            vp.on('resume', function () {
-                if (vp.mainVideoHasFocus()) {
-                    vp.trigger('bubblehide');
+            vp.on('ended', function (videoInfo) {
+                if (null !== zis.adVideoInfo) {
+                    if (true === vp.isSameVideoInfo(videoInfo, zis.adVideoInfo)) {
+                        vp.trigger('bubblehide');
+                    }
                 }
             });
         },

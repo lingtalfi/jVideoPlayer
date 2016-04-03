@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'jvp-icomoon';
-  src: url('fonts/icomoon.eot?zfnbf5');
-  src: url('fonts/icomoon.eot?zfnbf5#iefix') format('embedded-opentype'),
-  url('fonts/icomoon.ttf?zfnbf5') format('truetype'),
-  url('fonts/icomoon.woff?zfnbf5') format('woff'),
-  url('fonts/icomoon.svg?zfnbf5#icomoon') format('svg');
+  src: url('fonts/icomoon.eot?zfnbf6');
+  src: url('fonts/icomoon.eot?zfnbf6#iefix') format('embedded-opentype'),
+  url('fonts/icomoon.ttf?zfnbf6') format('truetype'),
+  url('fonts/icomoon.woff?zfnbf6') format('woff'),
+  url('fonts/icomoon.svg?zfnbf6#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -146,7 +146,7 @@ $bottomThing: 10%;
       left: 0;
       top: 0;
       transition: top 150ms linear, opacity 150ms linear, transform 150ms linear;
-      z-index: 1;
+      z-index: 2;
       opacity: 1;
       display: flex;
       width: 100%;
@@ -181,7 +181,7 @@ $bottomThing: 10%;
           border-radius: $scrubberRadius;
           background: #262626;
           box-shadow: 0 .2em .1em 0 rgba(0, 0, 0, 0.3);
-          overflow: hidden;
+          //overflow: hidden;
           box-sizing: border-box;
           position: relative;
 
@@ -192,20 +192,25 @@ $bottomThing: 10%;
             box-sizing: border-box;
             border-radius: $scrubberRadius 0 0 $scrubberRadius;
             display: inline-block;
+            position: absolute;
+            left: 0;
+            z-index: 2;
           }
 
           .buffered {
-            border-radius: 0 $scrubberRadius $scrubberRadius 0;
             display: inline-block;
+            border-radius: $scrubberRadius;
             height: $scrubberHeight;
             background: #2f3233;
             box-sizing: border-box;
             position: absolute;
+            left: 0;
+            z-index: 1;
           }
 
           .mark {
             position: relative;
-            top: -1.2em;
+            top: 0em;
             height: $scrubberHeight;
             background: gray;
             width: 2px;
@@ -217,7 +222,7 @@ $bottomThing: 10%;
             &.arrow {
               background: #fff;
               position: absolute;
-              top: $scrubberHeight;
+              top: 0;
               opacity: 0;
 
               &::after {
@@ -558,8 +563,10 @@ $bottomThing: 10%;
     .bubble_bar {
 
       position: absolute;
-      bottom: 0;
       right: 0;
+      bottom: -10em; // we go below the timeline, otherwise the user cannot hover the timeline (no thumbnail preview)
+      z-index: 1;
+      transition: z-index 0.05s;
 
       .bubble {
         width: 30%;
@@ -605,8 +612,8 @@ $bottomThing: 10%;
     .backtoapp {
       opacity: 0;
     }
-    
-    .cue{
+
+    .cue {
       bottom: $bottomThing;
     }
   }
@@ -667,13 +674,18 @@ $bottomThing: 10%;
     opacity: 0;
   }
 
+  &.with_bubble .bubble_bar{
+    z-index: 3;
+    transition: z-index 0.1s linear 0.3s;
+  }
+  
   &.with_bubble .bubble_bar .bubble {
-    transform: translateY(-8em);
+    transform: translateY(-18em);
     opacity: 1;
   }
 
   &.hide_timeline.with_bubble .bubble_bar .bubble {
-    transform: translateY(-6em);
+    transform: translateY(-16em);
   }
 
   &.fullscreen .cue {
