@@ -430,7 +430,7 @@
     .mantis_host .player_controls .bubble_bar {
       position: absolute;
       right: 0;
-      bottom: -10em;
+      bottom: 0;
       z-index: 1;
       transition: z-index 0.05s; }
       .mantis_host .player_controls .bubble_bar .bubble {
@@ -493,10 +493,10 @@
     z-index: 3;
     transition: z-index 0.1s linear 0.3s; }
   .mantis_host.with_bubble .bubble_bar .bubble {
-    transform: translateY(-18em);
+    transform: translateY(-8em);
     opacity: 1; }
   .mantis_host.hide_timeline.with_bubble .bubble_bar .bubble {
-    transform: translateY(-16em); }
+    transform: translateY(-6em); }
   .mantis_host.fullscreen .cue {
     bottom: 20%; }
 

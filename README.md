@@ -770,6 +770,12 @@ Related dependencies
 History Log
 ------------------
     
+- 2.1.0 -- 2016-04-04
+
+    - fixed mantis css bubble 
+    - removed prototype/video/late-for-work.mp4 (too heavy)
+
+
 - 2.0.0 -- 2016-04-03
         
     - simplified default video player api

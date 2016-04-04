@@ -564,7 +564,7 @@ $bottomThing: 10%;
 
       position: absolute;
       right: 0;
-      bottom: -10em; // we go below the timeline, otherwise the user cannot hover the timeline (no thumbnail preview)
+      bottom: 0;
       z-index: 1;
       transition: z-index 0.05s;
 
@@ -680,12 +680,12 @@ $bottomThing: 10%;
   }
   
   &.with_bubble .bubble_bar .bubble {
-    transform: translateY(-18em);
+    transform: translateY(-8em);
     opacity: 1;
   }
 
   &.hide_timeline.with_bubble .bubble_bar .bubble {
-    transform: translateY(-16em);
+    transform: translateY(-6em);
   }
 
   &.fullscreen .cue {
