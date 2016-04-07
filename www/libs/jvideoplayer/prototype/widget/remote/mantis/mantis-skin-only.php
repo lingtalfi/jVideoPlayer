@@ -103,6 +103,7 @@
     <button class="special toggle_mute">toggle_mute</button>
     <button class="special toggle_bubble">toggle_bubble</button>
     <button class="special toggle_preview">toggle_preview</button>
+    <button class="special hideshow_timeline">hide/show timeline</button>
 </div>
 
 <script>
@@ -134,6 +135,9 @@
                 }
                 else if ($(this).hasClass('toggle_preview')) {
                     jSurface.toggleClass("preview_mode");
+                }
+                else if ($(this).hasClass('hideshow_timeline')) {
+                    jSurface.toggleClass("no_timeline");
                 }
                 else if ($(this).hasClass('toggle_mute')) {
                     var jControl = $('.control_volume');

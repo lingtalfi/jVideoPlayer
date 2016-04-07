@@ -31,7 +31,13 @@
         this.sliderWidth = 0;
         this.halfPreviewWidth = 0;
         this.isFullScreen = false;
+
+        /**
+         * The maximum time in seconds to which the user can scrub
+         */
         this.scrubLimit = null;
+        
+        
 
         this.jSurface = jSurface;
         this.jPlayer = $('.player_controls', this.jSurface); // contains all css actions/transitions/states classes 
@@ -275,6 +281,12 @@
         },
         isPlayHeadDragging: function () {
             return this.jSurface.hasClass('scrub_mode');
+        },
+        hideTimeline: function(){
+            this.vswitch.kickIn('no_timeline');  
+        },
+        showTimeline: function(){
+            this.vswitch.kickOut('no_timeline');  
         },
         //------------------------------------------------------------------------------/
         // SPECIAL 

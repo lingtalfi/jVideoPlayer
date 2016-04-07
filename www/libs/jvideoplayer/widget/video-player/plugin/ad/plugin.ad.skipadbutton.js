@@ -44,6 +44,7 @@
             // EVENTS LISTENING
             //------------------------------------------------------------------------------/
             vp.on('canskipad', function (videoInfo) {
+                zis.adVideoInfo = videoInfo;
                 vp.trigger('bubblehide'); // hide any already existing bubble, by precaution
                 vp.trigger('bubblesettext', jLink);
                 vp.trigger('bubbleshow');

@@ -26,10 +26,6 @@
      * - inactivityOff: by default, remove the inactivity css class from the host
      *
      *
-     *
-     *
-     *
-     *
      */
     window.pluginInactivity = function (options) {
         this.d = $.extend({

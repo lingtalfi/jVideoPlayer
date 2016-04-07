@@ -677,7 +677,7 @@ the video player's source file itself.
 
 
 
-![Default videoplayer built-in plugins events interaction map](http://s19.postimg.org/4qmp1ieeb/videoplayer_events_interaction_map2.jpg)
+![Default videoplayer built-in plugins events interaction map](http://s19.postimg.org/be5z29aoz/default_videoplayer_builtin_plugins_events_inter.jpg)
 
 
 
@@ -770,6 +770,14 @@ Related dependencies
 History Log
 ------------------
     
+- 3.0.0 -- 2016-04-07
+
+    - the default video player's resume, pause, setVolume and setTime methods are now independent of whether or not a video is actually played
+    - fixed plugin.ad.skipadbutton natural end not working
+    - plugin.mantis add showtimeline/hidetimeline events, and corresponding mehtods in mantis
+    
+    
+
 - 2.1.0 -- 2016-04-04
 
     - fixed mantis css bubble 

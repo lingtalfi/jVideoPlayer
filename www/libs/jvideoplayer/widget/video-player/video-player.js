@@ -104,7 +104,7 @@
              */
             element: null,
             plugins: [],
-            isSameVideoInfo: function(vA, vB){
+            isSameVideoInfo: function (vA, vB) {
                 return (vA.hasOwnProperty('url') && vB.hasOwnProperty('url') && vA.url === vB.url);
             },
         }, options);
@@ -175,36 +175,42 @@
          * Triggers the resume event if the current video is not playing
          */
         resume: function () {
-            if (false === this.getCurrentVideo().isPlaying()) {
-                this.trigger('resume', this.currentVideoInfo);
+            /**
+             * null === this.currentVideoInfo, allow non video events to be managed by the videoPlayer (used by the live plugin).
+             */
+            if (null === this.currentVideoInfo || false === this.getCurrentVideo().isPlaying()) {
+                this.trigger('resume');
             }
         },
         /**
          * Triggers the pause event if the current video is playing
          */
         pause: function () {
-            if (true === this.getCurrentVideo().isPlaying()) {
-                this.trigger('pause', this.currentVideoInfo);
+            /**
+             * null === this.currentVideoInfo, allow non video events to be managed by the videoPlayer (used by the live plugin).
+             */
+            if (null === this.currentVideoInfo || true === this.getCurrentVideo().isPlaying()) {
+                this.trigger('pause');
             }
         },
         /**
          * Triggers the settime event with the time argument is seconds
          */
         setTime: function (t) {
-            this.trigger('settime', t, this.currentVideoInfo);
+            this.trigger('settime', t);
         },
         /**
          * Triggers the setvolume event with the volume argument in the range of 0 to 1 (both included)
          */
         setVolume: function (v) {
-            this.trigger('setvolume', v, this.currentVideoInfo);
+            this.trigger('setvolume', v);
         },
         //------------------------------------------------------------------------------/
         // PROTECTED API
         //------------------------------------------------------------------------------/
         /**
          * Load a video in the background.
-         * Plugin should use this to load a video.
+         * Plugins should use this to load a video.
          *
          * It returns a loadedPromise (the promise that the video is loaded).
          * The loadedPromise has two special properties used for internal purposes, you shouldn't have to use them often:
@@ -321,11 +327,15 @@
                     zis.lm.transfer(layerName, layer, false);
                     zis.currentVideoInfo = videoInfo;
                     zis.trigger("setcurrentvideo", videoInfo);
-                    zis.trigger("resume");
+
+                    if (false === loadedPromise.hasOwnProperty('noResume') || fa) {
+                        zis.trigger("resume");
+                    }
 
                     if ('playAfter' in callbacks) {
                         callbacks.playAfter(videoInfo);
                     }
+
                 });
 
             }, timeout);
@@ -348,7 +358,10 @@
          * Sugar method to return the current videoInfo's videoElement instance
          */
         getCurrentVideo: function () {
-            return this.currentVideoInfo._videoElement;
+            if (null !== this.currentVideoInfo) {
+                return this.currentVideoInfo._videoElement;
+            }
+            return null;
         },
         /**
          * Sugar method to return whether or not videoInfoA and videoInfoB are the same
@@ -469,16 +482,24 @@
             // AUTO-REGISTERING INTERNAL EVENTS
             //------------------------------------------------------------------------------/
             this.on('resume', function () {
-                zis.getCurrentVideo().resume();
+                if (null !== zis.currentVideoInfo) {
+                    zis.getCurrentVideo().resume();
+                }
             });
             this.on('pause', function () {
-                zis.getCurrentVideo().pause();
+                if (null !== zis.currentVideoInfo) {
+                    zis.getCurrentVideo().pause();
+                }
             });
             this.on('settime', function (t) {
-                zis.getCurrentVideo().setTime(t);
+                if (null !== zis.currentVideoInfo) {
+                    zis.getCurrentVideo().setTime(t);
+                }
             }, 100);
             this.on('setvolume', function (v) {
-                zis.getCurrentVideo().setVolume(v);
+                if (null !== zis.currentVideoInfo) {
+                    zis.getCurrentVideo().setVolume(v);
+                }
             });
 
 

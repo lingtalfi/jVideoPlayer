@@ -56,8 +56,13 @@
             // TRIGGERED
             //------------------------------------------------------------------------------/
             mantis.on('timelineupdated', function (p) {
-                vp.setTime(vp.getCurrentVideo().getDuration() * p / 100);
-                //vp.setTime(Math.ceil(vp.getCurrentVideo().getDuration() * p / 100));
+                var curVideo = vp.getCurrentVideo();
+                if (null !== curVideo) {
+                    /**
+                     * In live mode, the curVideo ùight
+                     */
+                    vp.setTime(curVideo.getDuration() * p / 100);
+                }
             });
             mantis.on('play', function () {
                 vp.resume();
@@ -115,9 +120,16 @@
             vp.on('bubblesettext', function (text) {
                 mantis.setBubbleContent(text);
             });
-            
+
             vp.on('scrublimit', function (t) {
                 mantis.setScrubLimit(t);
+            });
+            
+            vp.on('hidetimeline', function (t) {
+                mantis.hideTimeline();
+            });
+            vp.on('showtimeline', function (t) {
+                mantis.showTimeline();
             });
 
 

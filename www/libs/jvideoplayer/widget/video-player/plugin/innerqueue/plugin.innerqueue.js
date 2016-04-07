@@ -58,7 +58,7 @@
      * - resume ( videoInfo ): to sync the eventsQueue
      * - pause ( videoInfo ): to sync the eventsQueue
      * - settime ( t, videoInfo ): to sync the eventsQueue
-     * - setvolume ( v, videoInfo ): to sync the eventsQueue
+     * - setcurrentvideo ( videoInfo ): to sync the eventsQueue
      * 
      * 
      * 

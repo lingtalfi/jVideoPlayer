@@ -94,6 +94,20 @@ $bottomThing: 10%;
       width: 100%;
       height: 100%;
     }
+    
+    /*--------------------------------------------------------------------------*
+    // PANEL
+    /*--------------------------------------------------------------------------*/
+    .layer-panel{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      background: black;
+      color: white;
+      font-family: verdana, arial;
+      
+    }
   }
 
   .cue {
@@ -674,11 +688,15 @@ $bottomThing: 10%;
     opacity: 0;
   }
 
-  &.with_bubble .bubble_bar{
+  &.no_timeline .player_controls .timeline {
+    display: none;
+  }
+
+  &.with_bubble .bubble_bar {
     z-index: 3;
     transition: z-index 0.1s linear 0.3s;
   }
-  
+
   &.with_bubble .bubble_bar .bubble {
     transform: translateY(-8em);
     opacity: 1;

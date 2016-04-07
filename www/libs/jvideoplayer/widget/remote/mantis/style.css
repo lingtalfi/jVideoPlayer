@@ -71,10 +71,20 @@
     position: absolute;
     z-index: 1;
     width: 100%;
-    height: 100%; }
+    height: 100%;
+    /*--------------------------------------------------------------------------*
+    // PANEL
+    /*--------------------------------------------------------------------------*/ }
     .mantis_host > .videoplayer video {
       width: 100%;
       height: 100%; }
+    .mantis_host > .videoplayer .layer-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      color: white;
+      font-family: verdana, arial; }
   .mantis_host .cue {
     position: absolute;
     z-index: 2;
@@ -489,6 +499,8 @@
     top: 6em;
     transform: scale(0.95);
     opacity: 0; }
+  .mantis_host.no_timeline .player_controls .timeline {
+    display: none; }
   .mantis_host.with_bubble .bubble_bar {
     z-index: 3;
     transition: z-index 0.1s linear 0.3s; }
