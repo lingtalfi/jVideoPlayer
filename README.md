@@ -8,8 +8,7 @@ A javascript library to help building a video player.
  
 
 
-![jvideoplayer playing kung fu panda 2](http://s19.postimg.org/vy3rzimw3/jvideoplayer.png)
- 
+[![jvideoplayer playing kung fu panda 2](https://i.postimg.cc/c1wTLPBq/jvideoplayer.png)](https://postimg.cc/9zXyx8k1)
  
 Demo video of jvideo player playing Dreamworks' kung fu panda 2: https://www.youtube.com/watch?v=GkYCZXgQLkY
 
