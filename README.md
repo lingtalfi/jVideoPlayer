@@ -1,5 +1,5 @@
-jVideoPlayer
-==================
+JVideoPlayer
+============
 2016-03-19
 
 
@@ -9,6 +9,22 @@ A javascript library to help building a video player.
 
 
 [![jvideoplayer playing kung fu panda 2](https://i.postimg.cc/c1wTLPBq/jvideoplayer.png)](https://postimg.cc/9zXyx8k1)
+
+
+JVideoPlayer is part of the [universe framework](https://github.com/karayabin/universe-snapshot).
+
+
+Install
+=============
+
+
+Using the [uni tool](https://github.com/lingtalfi/universe-naive-importer)
+```bash
+uni import JVideoPlayer
+```
+
+
+
  
 Demo video of jvideo player playing Dreamworks' kung fu panda 2: https://www.youtube.com/watch?v=GkYCZXgQLkY
 
