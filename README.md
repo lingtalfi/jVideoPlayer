@@ -8,7 +8,7 @@ A javascript library to help building a video player.
  
 
 
-[![jvideoplayer playing kung fu panda 2](https://i.postimg.cc/c1wTLPBq/jvideoplayer.png)](https://postimg.cc/9zXyx8k1)
+[![jvideoplayer playing kung fu panda 2](http://lingtalfi.com/img/universe/JVideoPlayer/jvideoplayer.png)](http://lingtalfi.com/img/universe/JVideoPlayer/jvideoplayer.png)
 
 
 JVideoPlayer is part of the [universe framework](https://github.com/karayabin/universe-snapshot).
@@ -417,7 +417,7 @@ The global picture
 The most abstract picture is perhaps that there is a **videoplayer** in the middle, and plugins around it.
 
 
-![jvideo player abstract picture](http://s19.postimg.org/c9o7t3zab/jvideoplayer_global_picture.jpg)
+![jvideo player abstract picture](http://lingtalfi.com/img/universe/JVideoPlayer/jvideoplayer-global-picture.jpg)
 
 The **videoplayer**'s role is to play videos.
 
@@ -480,7 +480,7 @@ A **default video player** plugin is any js object with a prepare method.
 Here is what the default video player looks like from above; so this is the beast; what plugins have to deal with (and you as a plugin developer).
  
 
-![default videoplayer, abstract](http://s19.postimg.org/s600t48rn/default_videoplayer_architecture_2.jpg)
+![default videoplayer, abstract](http://lingtalfi.com/img/universe/JVideoPlayer/default-videoplayer-architecture-2.jpg)
 
 
 Notice that the **default video player** is a wrapper with its own methods.
@@ -676,7 +676,7 @@ The default video player's built-in plugins are the following:
 
 The image below is a global overview of the built-in plugins.
 
-![default videoplayer built-in plugins]( http://s19.postimg.org/g6652u9nn/default_videoplayer_built_in_plugins_2b.jpg )
+![default videoplayer built-in plugins]( http://lingtalfi.com/img/universe/JVideoPlayer/default-videoplayer-built-in-plugins-2b.jpg )
 
 
 Plugins can communicate between themselves, or they can communicate with the default video player too.
@@ -692,7 +692,7 @@ the video player's source file itself.
 
 
 
-![Default videoplayer built-in plugins events interaction map](http://s19.postimg.org/be5z29aoz/default_videoplayer_builtin_plugins_events_inter.jpg)
+![Default videoplayer built-in plugins events interaction map](http://lingtalfi.com/img/universe/JVideoPlayer/default-videoplayer-builtin-plugins-events-inter.jpg)
 
 
 
